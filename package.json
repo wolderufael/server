@@ -1,0 +1,15 @@
+{
+    "name": "song-website",
+    "private": "true",
+    "version": "1.0",
+    "main": "app.js",
+    "scripts": {
+        "start": "nodemon app.js"
+    },
+    "dependencies": {
+        "cors": "^2.8.5",
+        "express": "^4.19.2",
+        "mocha": "^10.6.0",
+        "mongoose": "^8.4.5"
+    }
+}
