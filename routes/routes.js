@@ -1,6 +1,7 @@
 const express = require("express");
 const statisticsRouter = require("./statistics");
 const Song = require("../models/song");
+const User = require("../models/user");
 
 const router = express.Router();
 
@@ -8,10 +9,28 @@ router.use(function (req, res, next) {
   res.locals.currentSong = req.song;
   next();
 });
+router.get("/login", async (rq, res, next) => {
+  try {
+    const { username, password } = req.body
+    const existingUser = await Song.findOne({
+      username: username
+    });
+    if (existingUser) {
+      return res.status(200).json({ message: "User Exists" });
+    }
 
+    const newUser = new User({
+      username: username
+    })
+
+     await newUser.save();
+     res.status(201).json({ message: "User Added", song: newSong });
+  } catch (error) {
+    next(err);
+  }
+})
 router.get("/", async (rq, res, next) => {
   try {
-    // Fetch songs from the database, sorted by the time they are created Ascending order
 
     const songs = await Song.find().sort({ createdAt: -1 }).exec();
 
@@ -44,7 +63,7 @@ router.post("/addsong", async (req, res, next) => {
   }
 });
 
-router.put("/editsong/:id", async (req, res, next) => {
+router.put("/:id", async (req, res, next) => {
   try {
     const songId = req.params.id;
     const { title, artist, album, genre } = req.body;

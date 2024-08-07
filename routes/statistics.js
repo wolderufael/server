@@ -8,8 +8,17 @@ router.get("/statistics", async (req, res, next) => {
       {
         $facet: {
           songCount: [
-            { $group: { _id: "$title" } },
-            {$count: "totalSongs"}
+            {
+              $group: {
+                _id: {
+                  title: "$title",
+                  artist: "$artist",
+                  album: "$album",
+                  genre: "$genre",
+                },
+              },
+            },
+            { $count: "totalSongs" },
           ],
           artistCount: [
             { $group: { _id: "$artist" } },
